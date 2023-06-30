@@ -163,7 +163,7 @@ def update_hw():
             update_entries()
         row
     except:
-        messagebox.showinfo("Error", "Invalid value. Please enter a float data type.")
+        messagebox.showinfo("Error", "Invalid input. Please check the values you entered.")
 
     # Calculating new overall totals
     total = 0
