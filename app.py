@@ -1,4 +1,3 @@
-import tkinter
 from tkinter import *
 import tkinter as tk
 from tkinter import filedialog, simpledialog, messagebox
@@ -39,6 +38,7 @@ def upload_json():
                                                  filetypes=((".json files", "*.json"), ("All files", "*.*")))
     clear_frame(middle_frame)
     clear_frame(bottom_frame)
+
     try:
         with open(filename, "r", encoding="utf-8") as file:
             raw_data = json.load(file)
@@ -136,7 +136,12 @@ def grand_total():
     # Calculating new grand total
     j = len(global_data.entries_hw) + len(global_data.entries_sw) + 6
     total_cost = round(global_data.total_hw + global_data.total_sw, 2)
-    global_data.total_widgets["grand_total"].destroy()
+    try:
+        global_data.total_widgets["grand_total"].destroy()
+    except KeyError:
+        pass
+    label_grand_total_text = tk.Label(bottom_frame, text="GRAND TOTAL", bg="red", font=("Arial Bold", 13))
+    label_grand_total_text.grid(row=j, column=7, pady=10)
     label_grand_total = tk.Label(bottom_frame, text=f"£{total_cost}", bg="red", font=("Arial Bold", 13))
     label_grand_total.grid(row=j, column=8, pady=10)
     global_data.total_widgets["grand_total"] = label_grand_total
@@ -175,7 +180,6 @@ def update_hw():
     grand_total()
 
 def update_sw():
-
     def update_entries():
         for row in global_data.entries_sw:
             for entry in row:
@@ -273,7 +277,7 @@ def new_template():
 
     new_hw(hw_count)
     new_sw(sw_count)
-    push_desc("You can use the empty template below to calculate the cost of your project.\nYou can also export your estimates by selecting 'Export .json' from file menu. \n\n Note: \n Title and description should be string. \n Count, Pro,ce, Mfg.Cost, Design Cost, Coding Cost and Testing Cost should either be float or integer.\n Leave total blank, app will calculate the totals for you.")
+    push_desc("You can use the empty template below to calculate the cost of your project.\nYou can also export your estimates by selecting 'Export .json' from file menu.")
 
     # Table headers
     i = 0
@@ -337,7 +341,8 @@ def read_me():
 # Create a Tkinter window
 root = tk.Tk()
 root.title("Project Cost Calculator")
-root.geometry("1280x720")
+width, height = root.winfo_screenwidth(), root.winfo_screenheight()
+root.geometry('%dx%d+0+0' % (width,height))
 
 # Home screen
 
@@ -345,8 +350,31 @@ top_frame = tk.Frame(root)
 top_frame.pack()
 middle_frame = tk.Frame(root)
 middle_frame.pack(side=TOP)
-bottom_frame = tk.Frame(root)
-bottom_frame.pack(fill="y")
+#bottom_frame = tk.Frame(root)
+#bottom_frame.pack(fill="y")
+canvas = tk.Canvas(root)
+canvas.pack()
+
+# Scrollbar
+
+scrollbar = Scrollbar(root, orient="vertical", command=canvas.yview)
+bottom_frame = tk.Frame(canvas)
+
+bottom_frame.bind(
+    "<Configure>",
+    lambda e: canvas.configure(
+        scrollregion=canvas.bbox("all"),
+        width=e.width,
+        height=e.height
+    )
+)
+
+canvas.create_window(0, 0, window=bottom_frame, anchor="nw")
+canvas.configure(yscrollcommand=scrollbar.set)
+#scrollbar.pack(side=RIGHT, fill=Y)
+scrollbar.place(relx=1, rely=0.5, anchor="e", height=200, width=20)
+
+# Labels and description
 
 label_top = tk.Label(top_frame, text="Project Cost Calculator", font=("Arial bold", 26))
 label_top.pack(padx=20, pady=15)
@@ -354,13 +382,15 @@ desc_text = "Welcome to Project Cost Calculator.\n You can upload a .json file w
 push_desc(desc_text)
 
 # Home screen buttons
-button_scratch = tk.Button(bottom_frame, text="Start from scratch", font=('Arial', 14), height=4,
+button_scratch = tk.Button(bottom_frame, text="Start with a new\ntemplate", font=('Arial', 14), height=4,
                            command=lambda: [clear_frame(middle_frame), clear_frame(bottom_frame), new_template()])
 button_scratch.grid(column=0, row=0)
-button_json = tk.Button(bottom_frame, text="Upload a .json file", font=('Arial', 14), height=4, command=upload_json)
+button_json = tk.Button(bottom_frame, text="Import a .json file", font=('Arial', 14), height=4, command=upload_json)
 button_json.grid(column=1, row=0)
 
-#Menu bar
+
+
+# Menu bar
 
 menubar = Menu(root)
 root.config(menu=menubar)
