@@ -32,24 +32,9 @@ The application relies on a number libraries and have a few dependencies to prov
 
 The application uses the following external libraries:
 
-- anytree (Anytree, N.D.): Provides the basic features for attack trees such as Node class and attack tree representation.
-- cmd (Python.org, 2023a): A simple framework for command line-oriented applications.
-- json (Python.org, 2023b): A basic .json encoder and decoder for python.
-- copy (Python.org, 2023c): Provides deepcopy() function to create a new compound object by recursively cloning child objects of the original.
-- time: (Python.org, 2023d): Provides a variety of time-related functions. In the app, only sleep() function is used to the interaction more human-friendly (i.e. by pausing for certain time to allow the user to read the messages displayed).
-
-For unit testing, the following external libraries were used:
-- unittest (Python.org, 2023e): Provides the unit testing functionality.
-- mock (Foord, 2023): Provides the ability to mock user input or variables for testing purposes.
-- os (Python.org, 2023f): Provides the ability to use operating system dependent functionality.
-
-Please follow the links in the references to know more about these external libraries.
-
 ### Dependencies
 
-Sole dependency of the application is Graphviz (2023) - an open source graph visualisation software. Please refer to the installation section for details about how to install it.
-
-It should also be noted that the application was written in Python 3.10.5 and it is advised to update the Python version on the client machines if necessary.
+All modules used in the application are part of the standard Python distribution, so you do not need to install any modules.
 
 ## Installation
 
