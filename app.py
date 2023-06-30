@@ -371,8 +371,7 @@ bottom_frame.bind(
 
 canvas.create_window(0, 0, window=bottom_frame, anchor="nw")
 canvas.configure(yscrollcommand=scrollbar.set)
-#scrollbar.pack(side=RIGHT, fill=Y)
-scrollbar.place(relx=1, rely=0.5, anchor="e", height=200, width=20)
+scrollbar.place(relx=1, rely=0.5, anchor="e", height=400, width=20)
 
 # Labels and description
 
