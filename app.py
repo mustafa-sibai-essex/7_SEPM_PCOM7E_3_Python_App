@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import *
 import tkinter as tk
 from tkinter import filedialog, simpledialog, messagebox
@@ -14,9 +15,10 @@ class app_data:
     entries_sw: list
     total_hw: float
     total_sw: float
+    total_widgets: dict
 
 keys = ["type", "description", "count", "price", "man_cost", "des_cost", "cod_cost", "tes_cost", "total"]
-global_data = app_data(keys, [], [], 0.0, 0.0)
+global_data = app_data(keys, [], [], 0.0, 0.0, {})
 
 
 # Functions
@@ -45,8 +47,8 @@ def upload_json():
 
     hardware = raw_data["Hardware"]
     software = raw_data["Software"]
-    global_data.total_hw = calculate(hardware)
-    global_data.total_sw = calculate(software)
+    global_data.total_hw = round(calculate(hardware),2)
+    global_data.total_sw = round(calculate(software),2)
     push_data_hw(hardware, global_data.total_hw)
     length_hw = len(hardware)
     push_data_sw(software, global_data.total_sw, length_hw) # Length is passed to the function so that the table can be appended where previous one ended
@@ -63,10 +65,11 @@ def upload_json():
     # Display grand total
     total_cost = round(global_data.total_hw + global_data.total_sw, 2)
     r = len(hardware) + len(software) + 6
-    label_grand_total = tk.Label(bottom_frame, text="GRAND TOTAL", bg="red",font=("Arial Bold", 13))
-    label_grand_total.grid(row=r, column=7, pady=10)
+    label_grand_total_text = tk.Label(bottom_frame, text="GRAND TOTAL", bg="red",font=("Arial Bold", 13))
+    label_grand_total_text.grid(row=r, column=7, pady=10)
     label_grand_total = tk.Label(bottom_frame, text=f"£{total_cost}", bg="red", font=("Arial Bold", 13))
     label_grand_total.grid(row=r, column=8, pady=10)
+    global_data.total_widgets["grand_total"] = label_grand_total
 
 
 def push_data_hw(data_set, total):
@@ -85,10 +88,11 @@ def push_data_hw(data_set, total):
         r += 1
         rows.append(cols)
     global_data.entries_hw = rows
-    label_total_text = tk.Label(bottom_frame, text="Hardware Total", bg="green", font=("Arial Bold", 12))
-    label_total_text.grid(row=index+1, column=7, pady=2)
-    label_total = tk.Label(bottom_frame, text=f"£{total}", bg="green", font=("Arial Bold", 12))
-    label_total.grid(row=index+1, column=8, pady=2)
+    label_total_hw_text = tk.Label(bottom_frame, text="Hardware Total", bg="green", font=("Arial Bold", 12))
+    label_total_hw_text.grid(row=index+1, column=7, pady=2)
+    label_total_hw = tk.Label(bottom_frame, text=f"£{total}", bg="green", font=("Arial Bold", 12))
+    label_total_hw.grid(row=index+1, column=8, pady=2)
+    global_data.total_widgets["hw_total"] = label_total_hw
 
     # Add an update button
     button_update_hw = tk.Button(bottom_frame, text="Update Hardware", font=('Arial', 12), height=1, command=lambda: update_hw())
@@ -110,10 +114,11 @@ def push_data_sw(data_set, total, length):
         r += 1
         rows.append(cols)
     global_data.entries_sw = rows # Updates the global variable
-    label_total_text = tk.Label(bottom_frame, text="Software Total", bg="green", font=("Arial Bold", 12))
-    label_total_text.grid(row=r+1, column=7, pady=2)
-    label_total = tk.Label(bottom_frame, text=f"£{total}", bg="green", font=("Arial Bold", 12))
-    label_total.grid(row=r+1, column=8, pady=2)
+    label_total_sw_text = tk.Label(bottom_frame, text="Software Total", bg="green", font=("Arial Bold", 12))
+    label_total_sw_text.grid(row=r+1, column=7, pady=2)
+    label_total_sw = tk.Label(bottom_frame, text=f"£{total}", bg="green", font=("Arial Bold", 12))
+    label_total_sw.grid(row=r+1, column=8, pady=2)
+    global_data.total_widgets["sw_total"] = label_total_sw
 
     # Add an update button
     button_update_sw = tk.Button(bottom_frame, text="Update Software", font=('Arial', 12), height=1, command=lambda: update_sw())
@@ -124,15 +129,17 @@ def calculate(data):
     index = len(data)
     for i in range(index):
         data[i]["total"] = round((data[i]["count"] * data[i]["price"]) + data[i]["man_cost"] + data[i]["des_cost"] + data[i]["cod_cost"] + data[i]["tes_cost"], 2)
-        total += data[i]["total"]
+        total += round(data[i]["total"],2)
     return total
 
 def grand_total():
     # Calculating new grand total
     j = len(global_data.entries_hw) + len(global_data.entries_sw) + 6
     total_cost = round(global_data.total_hw + global_data.total_sw, 2)
+    global_data.total_widgets["grand_total"].destroy()
     label_grand_total = tk.Label(bottom_frame, text=f"£{total_cost}", bg="red", font=("Arial Bold", 13))
     label_grand_total.grid(row=j, column=8, pady=10)
+    global_data.total_widgets["grand_total"] = label_grand_total
 
 def update_hw():
     def update_entries():
@@ -146,10 +153,10 @@ def update_hw():
     try:
         for row in global_data.entries_hw:
             total = (float(row[2].get()) * float(row[3].get())) + float(row[4].get()) + float(row[5].get()) + float(row[6].get()) + float(row[7].get())
-            print(total)
             row[8].delete(0,END)
             row[8].insert(END, round(total,2))
             update_entries()
+        row
     except:
         messagebox.showinfo("Error", "Invalid value. Please enter a float data type.")
 
@@ -157,11 +164,13 @@ def update_hw():
     total = 0
     for row in global_data.entries_hw:
         total += float(row[8].get())
-    global_data.total_hw = total
+    global_data.total_hw = round(total,2)
 
     i = len(global_data.entries_hw) + 1
-    label_total = tk.Label(bottom_frame, text=f"£{round(global_data.total_hw,2)}", bg="green", font=("Arial Bold", 12))
-    label_total.grid(row=i, column=8, pady=2)
+    global_data.total_widgets["hw_total"].destroy()
+    label_total_hw = tk.Label(bottom_frame, text=f"£{global_data.total_hw}", bg="green", font=("Arial Bold", 12))
+    label_total_hw.grid(row=i, column=8, pady=2)
+    global_data.total_widgets["hw_total"] = label_total_hw
 
     grand_total()
 
@@ -178,7 +187,6 @@ def update_sw():
         for row in global_data.entries_sw:
             total = (float(row[2].get()) * float(row[3].get())) + float(row[4].get()) + float(row[5].get()) + float(
                 row[6].get()) + float(row[7].get())
-            print(total)
             row[8].delete(0, END)
             row[8].insert(END, round(total, 2))
             update_entries()
@@ -189,15 +197,26 @@ def update_sw():
     total = 0
     for row in global_data.entries_sw:
         total += float(row[8].get())
-    global_data.total_sw = total
+    global_data.total_sw = round(total,2)
 
     i = len(global_data.entries_hw) + len(global_data.entries_sw) + 4
-    label_total = tk.Label(bottom_frame, text=f"£{round(global_data.total_sw, 2)}", bg="green", font=("Arial Bold", 12))
-    label_total.grid(row=i, column=8, pady=2)
+    global_data.total_widgets["sw_total"].destroy()
+    label_total_sw = tk.Label(bottom_frame, text=f"£{global_data.total_sw}", bg="green", font=("Arial Bold", 12))
+    label_total_sw.grid(row=i, column=8, pady=2)
+    global_data.total_widgets["sw_total"] = label_total_sw
 
     grand_total()
 
 def new_template():
+    # Clears the screen
+    clear_frame(middle_frame)
+    clear_frame(bottom_frame)
+
+    # Resets the global totals
+    global_data.total_hw = 0
+    global_data.total_sw = 0
+
+
     def new_hw(hw_count):
         r = 1  # Because row 0 has the headers, table starts from row 1.
         rows = []
@@ -214,8 +233,9 @@ def new_template():
         global_data.entries_hw = rows
         label_total_text = tk.Label(bottom_frame, text="Hardware Total", bg="green", font=("Arial Bold", 12))
         label_total_text.grid(row=hw_count + 1, column=7, pady=2)
-        label_total = tk.Label(bottom_frame, text=f"£{global_data.total_hw}", bg="green", font=("Arial Bold", 12))
-        label_total.grid(row=hw_count + 1, column=8, pady=2)
+        label_total_hw = tk.Label(bottom_frame, text=f"£{global_data.total_hw}", bg="green", font=("Arial Bold", 12))
+        label_total_hw.grid(row=hw_count + 1, column=8, pady=2)
+        global_data.total_widgets["hw_total"] = label_total_hw
 
         # Add an update button
         button_update_hw = tk.Button(bottom_frame, text="Update Hardware", font=('Arial', 12), height=1,
@@ -237,22 +257,23 @@ def new_template():
         global_data.entries_sw = rows  # Updates the global variable
         label_total_text = tk.Label(bottom_frame, text="Software Total", bg="green", font=("Arial Bold", 12))
         label_total_text.grid(row=r + 1, column=7, pady=2)
-        label_total = tk.Label(bottom_frame, text=f"£{global_data.total_sw}", bg="green", font=("Arial Bold", 12))
-        label_total.grid(row=r + 1, column=8, pady=2)
+        label_total_sw = tk.Label(bottom_frame, text=f"£{global_data.total_sw}", bg="green", font=("Arial Bold", 12))
+        label_total_sw.grid(row=r + 1, column=8, pady=2)
+        global_data.total_widgets["sw_total"] = label_total_sw
 
         # Add an update button
         button_update_sw = tk.Button(bottom_frame, text="Update Software", font=('Arial', 12), height=1,
                                      command=lambda: update_sw())
         button_update_sw.grid(row=r + 2, column=8, pady=2)
 
-    hw_count=simpledialog.askinteger(title="New template",
+    hw_count = simpledialog.askinteger(title="New template",
                                             prompt="How many hardware components does your project have?")
-    sw_count=simpledialog.askinteger(title="New template",
+    sw_count = simpledialog.askinteger(title="New template",
                                             prompt="How many hardware components does your project have?")
 
     new_hw(hw_count)
     new_sw(sw_count)
-    push_desc("You can use the empty template below to calculate the cost of your project. \n\n Note: \n Title and description should be string. \n Count, Pro,ce, Mfg.Cost, Design Cost, Coding Cost and Testing Cost should either be float or integer.\n Leave total blank, app will calculate the totals for you.")
+    push_desc("You can use the empty template below to calculate the cost of your project.\nYou can also export your estimates by selecting 'Export .json' from file menu. \n\n Note: \n Title and description should be string. \n Count, Pro,ce, Mfg.Cost, Design Cost, Coding Cost and Testing Cost should either be float or integer.\n Leave total blank, app will calculate the totals for you.")
 
     # Table headers
     i = 0
@@ -264,6 +285,45 @@ def new_template():
         i += 1
 
     grand_total()
+
+def export_json():
+    hardware_list = []
+    software_list = []
+    keys = global_data.keys
+
+    # Packing hardware components into a list of dictionaries
+    for row in global_data.entries_hw:
+        i = 0
+        entry = {}
+        for item in row:
+            try: # Typecasts numeric values to float
+                value = float(item.get())
+            except ValueError:
+                value = item.get()
+            entry[keys[i]] = value
+            i += 1
+        hardware_list.append(entry)
+
+    # Packing software components into a list of dictionaries
+    for row in global_data.entries_sw:
+        i = 0
+        entry = {}
+        for item in row:
+            try:
+                value = float(item.get())
+            except ValueError:
+                value = item.get()
+            entry[keys[i]] = value
+            i += 1
+        software_list.append(entry)
+
+    json_doc = {"Hardware": hardware_list, "Software": software_list}
+
+
+    filename = filedialog.asksaveasfilename(defaultextension="*.json")
+    with open(f"{filename}", "w") as save_file:
+        json.dump(json_doc, save_file, indent=6)
+
 
 def about():
     messagebox.showinfo("About the app", "Project Cost Calculator\n(c) 2023\nSibai & Associates")
@@ -306,8 +366,12 @@ menubar = Menu(root)
 root.config(menu=menubar)
 file_menu = Menu(menubar, tearoff=0)
 file_menu.add_command(
-    label='Upload .json',
+    label='Import .json',
     command=lambda: upload_json()
+)
+file_menu.add_command(
+    label='Export .json',
+    command=lambda: export_json()
 )
 file_menu.add_command(
     label='New template',
