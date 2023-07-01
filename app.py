@@ -1,11 +1,11 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import filedialog, simpledialog, messagebox
-import json
+from tkinter.messagebox import showinfo
 from dataclasses import dataclass
+import json
 import os
 
-#Global variable that will be used throughout the application
 @dataclass
 class app_data:
     """A class to keep track of global variables used throughout the app"""
@@ -19,21 +19,18 @@ class app_data:
 keys = ["type", "description", "count", "price", "man_cost", "des_cost", "cod_cost", "tes_cost", "total"]
 global_data = app_data(keys, [], [], 0.0, 0.0, {})
 
-
 # Functions
 def clear_frame(frame):
+    """Clears frame that passed as a parameter to clear the specified portions of screen"""
     for child in frame.winfo_children():
         child.destroy()
-
-def new_template():
-    desc = "You can start adding components to your project below."
-    push_desc(desc)
 
 def push_desc(text):
     """Publishes a description text in the middle frame"""
     label_desc = tk.Label(middle_frame, text=text, font=("Arial", 15))
     label_desc.pack(pady=30)
 def upload_json():
+    """Opens .json file and reads the content to memory"""
     filename = filedialog.askopenfilename(initialdir="/", title="Select a .json file to open",
                                                  filetypes=((".json files", "*.json"), ("All files", "*.*")))
     clear_frame(middle_frame)
@@ -73,6 +70,7 @@ def upload_json():
 
 
 def push_data_hw(data_set, total):
+    """Pushes the initial (upon opening a .json file) Hardware data to the bottom frame"""
     index = len(data_set)
     r = 1 # Because row 0 has the headers, table starts from row 1.
     rows = []
@@ -99,6 +97,7 @@ def push_data_hw(data_set, total):
     button_update_hw.grid(row=index+2, column=8, pady=2)
 
 def push_data_sw(data_set, total, length):
+    """Pushes the initial (upon opening a .json file) Software data to the bottom frame"""
     index = len(data_set)
     r = length + 3 # Due to headers, total hardware cost and update button we need to add three rows
     rows = []
@@ -125,6 +124,7 @@ def push_data_sw(data_set, total, length):
     button_update_sw.grid(row=r+2, column=8, pady=2)
 
 def calculate(data):
+    """Calculates the total cost of each component in the data set passed in reference (e.g. Hardware and Software"""
     total = 0
     index = len(data)
     for i in range(index):
@@ -133,7 +133,7 @@ def calculate(data):
     return total
 
 def grand_total():
-    # Calculating new grand total
+    """Calculates the total cost of the project"""
     j = len(global_data.entries_hw) + len(global_data.entries_sw) + 6
     total_cost = round(global_data.total_hw + global_data.total_sw, 2)
     try:
@@ -147,6 +147,7 @@ def grand_total():
     global_data.total_widgets["grand_total"] = label_grand_total
 
 def update_hw():
+    """Updates the hardware calculations upon user's amendment to data"""
     def update_entries():
         for row in global_data.entries_hw:
             for entry in row:
@@ -180,6 +181,7 @@ def update_hw():
     grand_total()
 
 def update_sw():
+    """Updates the software calculations upon user's amendment to data"""
     def update_entries():
         for row in global_data.entries_sw:
             for entry in row:
@@ -212,6 +214,8 @@ def update_sw():
     grand_total()
 
 def new_template():
+    """Displays an empty template on the screen, based on user input (i.e. number of rows and columns)"""
+
     # Clears the screen
     clear_frame(middle_frame)
     clear_frame(bottom_frame)
@@ -222,6 +226,7 @@ def new_template():
 
 
     def new_hw(hw_count):
+        """Displays the  empty hardware table"""
         r = 1  # Because row 0 has the headers, table starts from row 1.
         rows = []
         for i in range(hw_count):
@@ -246,6 +251,7 @@ def new_template():
                                      command=lambda: update_hw())
         button_update_hw.grid(row=hw_count + 2, column=8, pady=2)
     def new_sw(sw_count):
+        """Displays the  empty software table"""
         r = len(global_data.entries_hw) + 3  # Due to headers, total hardware cost and update button we need to add three rows
         rows = []
         for i in range(sw_count):
@@ -291,6 +297,8 @@ def new_template():
     grand_total()
 
 def export_json():
+    """Exports data as a j.son file"""
+
     hardware_list = []
     software_list = []
     keys = global_data.keys
@@ -328,15 +336,40 @@ def export_json():
     with open(f"{filename}", "w") as save_file:
         json.dump(json_doc, save_file, indent=6)
 
+def open_json():
+    """Opens .json file with default application for editing"""
+
+    filetypes = (
+        ('Json files', '*.json'),
+        ('All files', '*.*')
+    )
+
+    filename = filedialog.askopenfilename(
+        title='Open a file',
+        initialdir='/',
+        filetypes=filetypes)
+
+    showinfo(
+        title='Selected File',
+        message=filename
+    )
+
+    try:
+        os.popen(f"open {filename}") # for MacOS
+    except:
+        os.startfile(f"open {filename}") # for Windows
 
 def about():
+    """Displays about message box"""
     messagebox.showinfo("About the app", "Project Cost Calculator\n(c) 2023\nSibai & Associates")
 
 def read_me():
+    """Opens readme file with default application"""
     try:
-        os.popen("open README.md")
+        os.popen("open README.md") # for MacOS
     except:
-        os.startfile("open README.md")
+        os.startfile("open README.md") # for Windows
+
 
 # Create a Tkinter window
 root = tk.Tk()
@@ -344,37 +377,31 @@ root.title("Project Cost Calculator")
 width, height = root.winfo_screenwidth(), root.winfo_screenheight()
 root.geometry('%dx%d+0+0' % (width,height))
 
-# Home screen
-
+# Frames
 top_frame = tk.Frame(root)
 top_frame.pack()
 middle_frame = tk.Frame(root)
 middle_frame.pack(side=TOP)
-#bottom_frame = tk.Frame(root)
-#bottom_frame.pack(fill="y")
 canvas = tk.Canvas(root)
 canvas.pack()
 
 # Scrollbar
-
 scrollbar = Scrollbar(root, orient="vertical", command=canvas.yview)
 bottom_frame = tk.Frame(canvas)
 
 bottom_frame.bind(
     "<Configure>",
-    lambda e: canvas.configure(
+    lambda e: canvas.configure( # Extends the canvas to the size of the frame
         scrollregion=canvas.bbox("all"),
         width=e.width,
         height=e.height
     )
 )
-
 canvas.create_window(0, 0, window=bottom_frame, anchor="nw")
 canvas.configure(yscrollcommand=scrollbar.set)
 scrollbar.place(relx=1, rely=0.5, anchor="e", height=400, width=20)
 
 # Labels and description
-
 label_top = tk.Label(top_frame, text="Project Cost Calculator", font=("Arial bold", 26))
 label_top.pack(padx=20, pady=15)
 desc_text = "Welcome to Project Cost Calculator.\n You can upload a .json file with your project data or you choose to start with an empty template to create your project from scratch.\nYou will also be able to export .json data of your project."
@@ -390,7 +417,6 @@ button_json.grid(column=1, row=0)
 
 
 # Menu bar
-
 menubar = Menu(root)
 root.config(menu=menubar)
 file_menu = Menu(menubar, tearoff=0)
@@ -403,6 +429,10 @@ file_menu.add_command(
     command=lambda: export_json()
 )
 file_menu.add_command(
+    label='Open & edit .json',
+    command=lambda: open_json()
+)
+file_menu.add_command(
     label='New template',
     command=lambda: new_template()
 )
@@ -411,6 +441,7 @@ file_menu.add_command(
     label='Exit',
     command=root.destroy
 )
+
 help_menu = Menu(menubar, tearoff=0)
 help_menu.add_command(
     label='About',
@@ -423,8 +454,5 @@ help_menu.add_command(
 menubar.add_cascade(label="File", menu=file_menu)
 menubar.add_cascade(label="Help", menu=help_menu)
 
-
-
 # Start the Tkinter event loop
 root.mainloop()
-
