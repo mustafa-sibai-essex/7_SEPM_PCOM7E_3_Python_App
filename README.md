@@ -16,8 +16,8 @@ The app provides the following features:
   - [Libraries](#libraries)
   - [Dependencies](#dependencies)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Features](#features)
+- [Usage](#usage)
 - [Contact Information](#contact-information)
 - [Tests](#tests)
 - [License](#license)
@@ -31,7 +31,7 @@ The application relies on a number libraries and have a few dependencies to prov
 
 The application uses the following external libraries:
 
-- Tkinter: The application uses tkinter library to provide a GUI.
+- Tkinter (Python, N.D.): The application uses tkinter library to provide a GUI.
 - Dataclasses: In order to store global data used across the app, a dataclass object is initiated.
 - json: Importing and exporting .json functionality is provided by the json library.
 - os: OS-level functionality (i.e. as opening files) is provided by os library.
@@ -39,6 +39,24 @@ The application uses the following external libraries:
 ### Dependencies
 
 All modules used in the application are part of the standard Python distribution, so you do not need to install any modules.
+
+However, depending on your system configuration, you may need to install tkinter. To install tkinter run the following command in the terminal:
+
+#### Windows:
+~~~
+pip install tk
+~~~
+
+#### MacOS:
+~~~
+brew install python-tk@3.10
+~~~
+Note: Make sure you specify the correct Python version in the end.
+
+#### Debian/Ubuntu:
+~~~
+sudo apt-get install python3-tk
+~~~
 
 ## Installation
 
@@ -52,6 +70,15 @@ python3 app.py
 3. All modules used in the application are part of the standard Python distribution, so you do not need to install any modules to run the application.
 4. However, it is recommended to update your Python version to the latest version.
 
+## Features
+
+The features of the application are as follows:
+
+- Importing prohect data from a .json file
+- Making estimations by changing costs of components or adding/deleting components
+- Creating a project from scratch with a new template
+- Exporting project data as a .json file
+
 ## Usage
 
 1. Starting the application:
@@ -62,7 +89,7 @@ python3 app.py
 ~~~
 You can also use your favourite IDE to run the application.
 
-
+![app1.png](assets%2Fapp1.png)
 
 2. Importing a .json file:
 
@@ -116,23 +143,27 @@ The .json file that holds the project data should be structered like below:
 }
 ~~~
 
-
 A sample template is also provided in the root folder.
 
 3. Making estimations:
 
+The user can update the cost of the components and update the project cost by clicking on the "Update" button at the bottom at the bottom of the table.
 
+![app2.png](assets%2Fapp2.png)
 
 4. Using a new template to create a project estimate:
 
+The user can open an empty template (by clicking on "Start with a new template" button on the main screen or clicking on "New Template" from File menu) and add components and associated costs manually to calculate the total cost of the project.
 
+![app3.png](assets%2Fapp3.png)
 
+5. Adding/deleting components:
 
-5. Exporting project estimate as a .json file:
+To add or delete a component, the user has to edit the .json file that holds the project data. The user can do this conveniently by selecting "Open and edit .json" from the File menu. This will open the .json file in the default app.
 
-## Features
+6. Exporting project estimate as a .json file:
 
-The features of the application are as follows:
+The project can be exported as a .json file simply by selecting "Export .json" from File menu.
 
 ## Contact Information
 
@@ -141,7 +172,6 @@ You can contact the developer (Etkin Getir) at eg22518@essex.ac.uk for questions
 ## Tests
 
 Using unittest library, a total of XX test cases were written for the application.
-
 
 Test cases can be found in the unit_tests.py file and can be run by running the following command (verbose mode):
 ~~~
@@ -164,3 +194,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 
 ## References
 
+Python.org (N.D.) tkinter — Python interface to Tcl/Tk. Available from: https://docs.python.org/3/library/tkinter.html [Accessed 12 July 2023]
+Python.org (N.D.) dataclasses — Data Classes. Available from: https://docs.python.org/3/library/dataclasses.html [Accessed 12 July 2023]
+Python.org (N.D.) json — JSON encoder and decoder. Available from: https://docs.python.org/3/library/json.html [Accessed 12 July 2023]
+Python.org (N.D.) os — Miscellaneous operating system interfaces. Available from: https://docs.python.org/3/library/os.html [Accessed 12 July 2023]

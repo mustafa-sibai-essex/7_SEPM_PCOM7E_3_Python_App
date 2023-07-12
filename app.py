@@ -349,11 +349,6 @@ def open_json():
         initialdir='/',
         filetypes=filetypes)
 
-    showinfo(
-        title='Selected File',
-        message=filename
-    )
-
     try:
         os.popen(f"open {filename}") # for MacOS
     except:
