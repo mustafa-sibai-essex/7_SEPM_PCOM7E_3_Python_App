@@ -1,4 +1,3 @@
-# Project Cost Calculator
 
 ## Description
 
@@ -7,14 +6,14 @@ Project Cost Calculator is a GUI-based Python application which helps users to c
 The app provides the following features:
 
 - Import a .json file with project details
-- Make estimations based on the imported data 
+- Make estimations based on the imported data (i.e. changing components, costs, adding or deleting components and updating the total cost)
 - Start from a new template and create a project estimate from scratch 
 - Export the estimations as a .json file
 
 ## Table of Contents
 
-- [External Libraries and Dependencies](#external-libraries-and-dependencies)
-  - [External Libraries](#external-libraries)
+- [Libraries and Dependencies](#libraries-and-dependencies)
+  - [Libraries](#libraries)
   - [Dependencies](#dependencies)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -24,13 +23,18 @@ The app provides the following features:
 - [License](#license)
 - [References](#references)
 
-## External Libraries and Dependencies
+## Libraries and Dependencies
 
 The application relies on a number libraries and have a few dependencies to provide the intended functionalities.
 
 ### External Libraries
 
 The application uses the following external libraries:
+
+- Tkinter: The application uses tkinter library to provide a GUI.
+- Dataclasses: In order to store global data used across the app, a dataclass object is initiated.
+- json: Importing and exporting .json functionality is provided by the json library.
+- os: OS-level functionality (i.e. as opening files) is provided by os library.
 
 ### Dependencies
 
@@ -58,15 +62,71 @@ python3 app.py
 ~~~
 You can also use your favourite IDE to run the application.
 
+
+
 2. Importing a .json file:
 
-The .json file that will be important should be structered like below:
+The .json file that holds the project data should be structered like below:
 
-A sample template is also provided with the application, in the root folder.
+~~~
+{
+	"Hardware": [{
+			"type": "Board",
+			"description": "A83-S",
+			"count": 1,
+			"price": 25,
+			"man_cost": 14,
+			"des_cost": 8,
+			"cod_cost": 0,
+			"tes_cost": 1.38
+		},
+		{
+			"type": "RAM",
+			"description": "256KB",
+			"count": 2,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 16,
+			"cod_cost": 0,
+			"tes_cost": 2.76
+		}
+	],
+	"Software": [{
+			"type": "OS",
+			"description": "HB/OS in ROM",
+			"count": 1,
+			"price": 0,
+			"man_cost": 0,
+			"des_cost": 9,
+			"cod_cost": 8.85,
+			"tes_cost": 1.38
+
+		},
+		{
+			"type": "OS",
+			"description": "MccOS",
+			"count": 1,
+			"price": 0,
+			"man_cost": 0,
+			"des_cost": 2.25,
+			"cod_cost": 2.95,
+			"tes_cost": 0.15
+		}
+	]
+}
+~~~
+
+
+A sample template is also provided in the root folder.
 
 3. Making estimations:
 
+
+
 4. Using a new template to create a project estimate:
+
+
+
 
 5. Exporting project estimate as a .json file:
 
