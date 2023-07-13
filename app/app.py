@@ -29,8 +29,10 @@ def push_desc(text):
     """Publishes a description text in the middle frame"""
     label_desc = tk.Label(middle_frame, text=text, font=("Arial", 15))
     label_desc.pack(pady=30)
+    return label_desc # For testing purposes only
 def upload_json():
     """Opens .json file and reads the content to memory"""
+
     filename = filedialog.askopenfilename(initialdir="/", title="Select a .json file to open",
                                                  filetypes=((".json files", "*.json"), ("All files", "*.*")))
     clear_frame(middle_frame)
@@ -39,6 +41,7 @@ def upload_json():
     try:
         with open(filename, "r", encoding="utf-8") as file:
             raw_data = json.load(file)
+
     except FileNotFoundError:
         messagebox.showinfo("Error", "File not found.")
 
@@ -96,6 +99,8 @@ def push_data_hw(data_set, total):
     button_update_hw = tk.Button(bottom_frame, text="Update Hardware", font=('Arial', 12), height=1, command=lambda: update_hw())
     button_update_hw.grid(row=index+2, column=8, pady=2)
 
+    return global_data.entries_hw # For testing purposes only
+
 def push_data_sw(data_set, total, length):
     """Pushes the initial (upon opening a .json file) Software data to the bottom frame"""
     index = len(data_set)
@@ -145,6 +150,8 @@ def grand_total():
     label_grand_total = tk.Label(bottom_frame, text=f"£{total_cost}", bg="red", font=("Arial Bold", 13))
     label_grand_total.grid(row=j, column=8, pady=10)
     global_data.total_widgets["grand_total"] = label_grand_total
+    return total_cost
+
 
 def update_hw():
     """Updates the hardware calculations upon user's amendment to data"""
@@ -177,7 +184,6 @@ def update_hw():
     label_total_hw = tk.Label(bottom_frame, text=f"£{global_data.total_hw}", bg="green", font=("Arial Bold", 12))
     label_total_hw.grid(row=i, column=8, pady=2)
     global_data.total_widgets["hw_total"] = label_total_hw
-
     grand_total()
 
 def update_sw():
@@ -450,4 +456,5 @@ menubar.add_cascade(label="File", menu=file_menu)
 menubar.add_cascade(label="Help", menu=help_menu)
 
 # Start the Tkinter event loop
-root.mainloop()
+if __name__ == "__main__":
+    root.mainloop()
