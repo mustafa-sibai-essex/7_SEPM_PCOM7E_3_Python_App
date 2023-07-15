@@ -63,7 +63,7 @@ class JSONHandler:
         except:
             os.startfile(f"open {filename}")  # for Windows
 
-    def upload_json(self):
+    def load_json(self):
         """Opens .json file and reads the content to memory"""
 
         filename = filedialog.askopenfilename(
@@ -71,15 +71,24 @@ class JSONHandler:
             title="Select a .json file to open",
             filetypes=((".json files", "*.json"), ("All files", "*.*")),
         )
-        self.gui_handler.clear_frame(self.global_data.middle_frame)
-        self.gui_handler.clear_frame(self.gui_handler.get_bottom_frame())
 
         try:
             with open(filename, "r", encoding="utf-8") as file:
                 raw_data = json.load(file)
-
+                return raw_data
         except FileNotFoundError:
-            messagebox.showinfo("Error", "File not found.")
+            return None
+    
+    def upload_json(self):
+        """Opens .json file and reads the content to memory"""
+
+        raw_data = self.load_json()
+
+        if raw_data == None:
+            return messagebox.showinfo("Error", "File not found.")
+
+        self.gui_handler.clear_frame(self.gui_handler.middle_frame)
+        self.gui_handler.clear_frame(self.gui_handler.bottom_frame)
 
         hardware = raw_data["Hardware"]
         software = raw_data["Software"]
