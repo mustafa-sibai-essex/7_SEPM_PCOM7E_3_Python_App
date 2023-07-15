@@ -7,6 +7,17 @@ class GUIHandler:
     def __init__(self, global_data, json_handler):
         self.global_data = global_data
         self.json_handler = json_handler
+        self.keys = [
+            "type",
+            "description",
+            "count",
+            "price",
+            "man_cost",
+            "des_cost",
+            "cod_cost",
+            "tes_cost",
+            "total",
+        ]
 
     def get_bottom_frame(self):
         return self.bottom_frame
@@ -118,7 +129,7 @@ class GUIHandler:
         for i in range(index):
             cols = []
             j = 0
-            for key in self.global_data.keys:
+            for key in self.keys:
                 e = Entry(self.bottom_frame, relief=GROOVE, width=10)
                 e.grid(row=r, column=j)
                 e.insert(END, data_set[i][key])
@@ -162,7 +173,7 @@ class GUIHandler:
         for i in range(index):
             cols = []
             j = 0
-            for key in self.global_data.keys:
+            for key in self.keys:
                 e = Entry(self.bottom_frame, relief=GROOVE, width=10)
                 e.grid(row=r, column=j)
                 e.insert(END, data_set[i][key])
@@ -338,18 +349,6 @@ class GUIHandler:
         self.global_data.total_hw = 0
         self.global_data.total_sw = 0
 
-        self.global_data.keys = [
-            "Type",
-            "Description",
-            "Count",
-            "Price",
-            "Man. Cost",
-            "Des. Cost",
-            "Cod. Cost",
-            "Tes. Cost",
-            "Total",
-        ]
-
         def new_hw(hw_count):
             """Displays the  empty hardware table"""
             r = 1  # Because row 0 has the headers, table starts from row 1.
@@ -357,7 +356,7 @@ class GUIHandler:
             for i in range(hw_count):
                 cols = []
                 j = 0
-                for key in self.global_data.keys:
+                for key in self.keys:
                     e = Entry( self.bottom_frame, relief=GROOVE, width=10)
                     e.grid(row=r, column=j)
                     cols.append(e)
@@ -397,7 +396,7 @@ class GUIHandler:
             for i in range(sw_count):
                 cols = []
                 j = 0
-                for key in self.global_data.keys:
+                for key in self.keys:
                     e = Entry(self.bottom_frame, relief=GROOVE, width=10)
                     e.grid(row=r, column=j)
                     cols.append(e)

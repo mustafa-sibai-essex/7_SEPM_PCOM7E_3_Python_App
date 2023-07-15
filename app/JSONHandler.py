@@ -118,7 +118,7 @@ class JSONHandler:
         ]
         for header in headers:
             label_headers = tk.Label(
-                self.gui_handler.get_bottom_frame(),
+                self.gui_handler.bottom_frame,
                 text=header,
                 font=("Arial Bold", 12),
                 width=10,
@@ -130,14 +130,14 @@ class JSONHandler:
         total_cost = round(self.global_data.total_hw + self.global_data.total_sw, 2)
         r = len(hardware) + len(software) + 6
         label_grand_total_text = tk.Label(
-            self.gui_handler.get_bottom_frame(),
+            self.gui_handler.bottom_frame,
             text="GRAND TOTAL",
             bg="red",
             font=("Arial Bold", 13),
         )
         label_grand_total_text.grid(row=r, column=7, pady=10)
         label_grand_total = tk.Label(
-            self.gui_handler.get_bottom_frame(),
+            self.gui_handler.bottom_frame,
             text=f"£{total_cost}",
             bg="red",
             font=("Arial Bold", 13),
