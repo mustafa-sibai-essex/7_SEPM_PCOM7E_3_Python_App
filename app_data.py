@@ -1,7 +1,14 @@
+"""
+It holds a data class to be instantiated to be used throughout the application.
+
+Imports:
+    from dataclasses: dataclass
+"""
+
 from dataclasses import dataclass
 
 @dataclass
-class app_data:
+class AppData:
     """A class to keep track of global variables used throughout the app"""
 
     keys: list

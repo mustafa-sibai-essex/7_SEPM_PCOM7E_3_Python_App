@@ -1,3 +1,32 @@
+"""
+It holds a data class to be instantiated to be used throughout the application.
+
+Imports:
+    os
+    tkinter
+    from tkinter: simpledialog, messagebox
+
+Classes:
+    GUIHandler
+
+Functions:
+    get_bottom_fram()
+    start()
+    push_desc()
+    clear_frame()
+    push_data_hw()
+    push_data_sw()
+    calculate()
+    grand_total()
+    update_hw()
+    update_sw()
+    new_template()
+    new_hw()
+    new_sw()
+    about()
+    read_me()
+"""
+import platform
 from tkinter import *
 import tkinter as tk
 from tkinter import simpledialog, messagebox
@@ -5,31 +34,27 @@ import os
 
 
 class GUIHandler:
+    """
+    It defines the GUI elements, starts the tkinter loop and includes application logic.
+    """
     def __init__(self, global_data, json_handler):
         self.global_data = global_data
         self.json_handler = json_handler
-
-    def get_bottom_frame(self):
-        return self.bottom_frame
-
-    def start(self):
-        # Create a Tkinter window
-
-        root = tk.Tk()
-        root.title("Project Cost Calculator")
-        width, height = root.winfo_screenwidth(), root.winfo_screenheight()
-        root.geometry("%dx%d+0+0" % (width, height))
+        self.root = tk.Tk()
+        self.root.title("Project Cost Calculator")
+        width, height = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+        self.root.geometry("%dx%d+0+0" % (width, height))
 
         # Frames
-        self.top_frame = tk.Frame(root)
+        self.top_frame = tk.Frame(self.root)
         self.top_frame.pack()
-        self.middle_frame = tk.Frame(root)
+        self.middle_frame = tk.Frame(self.root)
         self.middle_frame.pack(side=TOP)
-        self.canvas = tk.Canvas(root)
+        self.canvas = tk.Canvas(self.root)
         self.canvas.pack()
 
         # Scrollbar
-        scrollbar = Scrollbar(root, orient="vertical", command=self.canvas.yview)
+        scrollbar = Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
         self.bottom_frame = tk.Frame(self.canvas)
 
         self.bottom_frame.bind(
@@ -49,7 +74,10 @@ class GUIHandler:
         )
         self.label_top.pack(padx=20, pady=15)
         self.push_desc(
-            "Welcome to Project Cost Calculator.\nYou can upload a .json file with your project data or you choose to start with an empty template to create your project from scratch.\nYou will also be able to export .json data of your project."
+            "Welcome to Project Cost Calculator.\nYou can upload a .json file with your "
+            "project data or you choose to start with an empty template to create your " 
+            "project from scratch.\nYou will also be able to export .json "
+            "data of your project."
         )
 
         # Home screen buttons
@@ -75,8 +103,8 @@ class GUIHandler:
         self.button_json.grid(column=1, row=0)
 
         # Menu bar
-        menubar = Menu(root)
-        root.config(menu=menubar)
+        menubar = Menu(self.root)
+        self.root.config(menu=menubar)
         file_menu = Menu(menubar, tearoff=0)
         file_menu.add_command(
             label="Import .json", command=self.json_handler.upload_json
@@ -90,7 +118,7 @@ class GUIHandler:
         )
         file_menu.add_command(label="New template", command=self.new_template)
         file_menu.add_separator()
-        file_menu.add_command(label="Exit", command=root.destroy)
+        file_menu.add_command(label="Exit", command=self.root.destroy)
 
         help_menu = Menu(menubar, tearoff=0)
         help_menu.add_command(label="About", command=self.about)
@@ -98,8 +126,10 @@ class GUIHandler:
         menubar.add_cascade(label="File", menu=file_menu)
         menubar.add_cascade(label="Help", menu=help_menu)
 
-        # Start the Tkinter event loop
-        root.mainloop()
+    def start(self):
+        """Starts the Tkinter event loop"""
+
+        self.root.mainloop()
 
     def push_desc(self, text):
         """Publishes a description text in the middle frame"""
@@ -148,7 +178,7 @@ class GUIHandler:
             text="Update Hardware",
             font=("Arial", 12),
             height=1,
-            command=lambda: self.update_hw(),
+            command=self.update_hw,
         )
         button_update_hw.grid(row=index + 2, column=8, pady=2)
 
@@ -192,25 +222,32 @@ class GUIHandler:
             text="Update Software",
             font=("Arial", 12),
             height=1,
-            command=lambda: self.update_sw(),
+            command=self.update_sw,
         )
         button_update_sw.grid(row=r + 2, column=8, pady=2)
 
     def calculate(self, data):
-        """Calculates the total cost of each component in the data set passed in reference (e.g. Hardware and Software"""
+        """Calculates the total cost of each component in the data set passed in reference
+        (e.g. Hardware and Software"""
         total = 0
         index = len(data)
-        for i in range(index):
-            data[i]["total"] = round(
-                (data[i]["count"] * data[i]["price"])
-                + data[i]["man_cost"]
-                + data[i]["des_cost"]
-                + data[i]["cod_cost"]
-                + data[i]["tes_cost"],
-                2,
+        try:
+            for i in range(index):
+                data[i]["total"] = round(
+                    (data[i]["count"] * data[i]["price"])
+                    + data[i]["man_cost"]
+                    + data[i]["des_cost"]
+                    + data[i]["cod_cost"]
+                    + data[i]["tes_cost"],
+                    2,
+                )
+                total += round(data[i]["total"], 2)
+            return total
+        except KeyError:
+            return messagebox.showinfo(
+                "Error", "Invalid input. Please check the values you entered."
             )
-            total += round(data[i]["total"], 2)
-        return total
+
 
     def grand_total(self):
         """Calculates the total cost of the project"""
@@ -260,7 +297,7 @@ class GUIHandler:
                 row[8].delete(0, END)
                 row[8].insert(END, round(total, 2))
                 update_entries()
-        except:
+        except KeyError:
             messagebox.showinfo(
                 "Error", "Invalid input. Please check the values you entered."
             )
@@ -330,7 +367,8 @@ class GUIHandler:
         self.grand_total()
 
     def new_template(self):
-        """Displays an empty template on the screen, based on user input (i.e. number of rows and columns)"""
+        """Displays an empty template on the screen, based on user input
+        (i.e. number of rows and columns)"""
 
         # Clears the screen
         self.clear_frame(self.middle_frame)
@@ -352,7 +390,8 @@ class GUIHandler:
         self.new_hw(hw_count)
         self.new_sw(sw_count)
         self.push_desc(
-            "You can use the empty template below to calculate the cost of your project.\nYou can also export your estimates by selecting 'Export .json' from file menu."
+            "You can use the empty template below to calculate the cost of your project.\n"
+            "You can also export your estimates by selecting 'Export .json' from file menu."
         )
 
         # Table headers
@@ -381,10 +420,10 @@ class GUIHandler:
         """Displays the  empty hardware table"""
         r = 1  # Because row 0 has the headers, table starts from row 1.
         rows = []
-        for i in range(hw_count):
+        for _ in range(hw_count):
             cols = []
             j = 0
-            for key in self.global_data.keys:
+            for _ in self.global_data.keys:
                 e = Entry(self.bottom_frame, relief=GROOVE, width=10)
                 e.grid(row=r, column=j)
                 cols.append(e)
@@ -414,7 +453,7 @@ class GUIHandler:
             text="Update Hardware",
             font=("Arial", 12),
             height=1,
-            command=lambda: self.update_hw(),
+            command=self.update_hw,
         )
         button_update_hw.grid(row=hw_count + 2, column=8, pady=2)
 
@@ -424,10 +463,10 @@ class GUIHandler:
             len(self.global_data.entries_hw) + 3
         )  # Due to headers, total hardware cost and update button we need to add three rows
         rows = []
-        for i in range(sw_count):
+        for _ in range(sw_count):
             cols = []
             j = 0
-            for key in self.global_data.keys:
+            for _ in self.global_data.keys:
                 e = Entry(self.bottom_frame, relief=GROOVE, width=10)
                 e.grid(row=r, column=j)
                 cols.append(e)
@@ -457,7 +496,7 @@ class GUIHandler:
             text="Update Software",
             font=("Arial", 12),
             height=1,
-            command=lambda: self.update_sw(),
+            command=self.update_sw,
         )
         button_update_sw.grid(row=r + 2, column=8, pady=2)
 
@@ -469,7 +508,8 @@ class GUIHandler:
 
     def read_me(self):
         """Opens readme file with default application"""
-        try:
+
+        if platform.system() == "Windows":
+            os.startfile("README.md")  # for Windows
+        elif platform.system() == "Darwin":
             os.popen("open README.md")  # for MacOS
-        except:
-            os.startfile("open README.md")  # for Windows

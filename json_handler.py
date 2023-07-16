@@ -1,14 +1,38 @@
+"""
+It holds a data class to be instantiated to be used throughout the application.
+
+Imports:
+    os
+    json
+    tkinter
+    from tkinter: filedialog, messagebox
+
+Classes:
+    JSONHandler
+
+Functions:
+    set_gui_handler()
+    export_json()
+    open_json()
+    load_json()
+    upload_json()
+"""
+import platform
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import json
 import os
 
 class JSONHandler:
+    """Contains .json-related functions"""
+
     def __init__(self, global_data):
         self.global_data = global_data
         self.gui_handler = None
 
     def set_gui_handler(self, gui_handler):
+        """Sets gui handler"""
+
         self.gui_handler = gui_handler
 
     def export_json(self, global_data):
@@ -46,7 +70,7 @@ class JSONHandler:
         json_doc = {"Hardware": hardware_list, "Software": software_list}
 
         filename = filedialog.asksaveasfilename(defaultextension="*.json")
-        with open(f"{filename}", "w") as save_file:
+        with open(f"{filename}", "w", encoding="utf-8") as save_file:
             json.dump(json_doc, save_file, indent=6)
 
     def open_json(self):
@@ -58,10 +82,11 @@ class JSONHandler:
             title="Open a file", initialdir="/", filetypes=filetypes
         )
 
-        try:
+        # Opens readme file with default application depending on the type of OS
+        if platform.system() == "Windows":
+            os.startfile(f"{filename}")  # for Windows
+        elif platform.system() == "Darwin":
             os.popen(f"open {filename}")  # for MacOS
-        except:
-            os.startfile(f"open {filename}")  # for Windows
 
     def load_json(self):
         """Opens .json file and reads the content to memory"""
@@ -75,17 +100,18 @@ class JSONHandler:
         try:
             with open(filename, "r", encoding="utf-8") as file:
                 raw_data = json.load(file)
-                return raw_data
+                return {"error": None, "data": raw_data}
         except FileNotFoundError:
-            return None
-    
+            return {"error": FileNotFoundError, "data": None}
+
     def upload_json(self):
         """Opens .json file and reads the content to memory"""
 
-        raw_data = self.load_json()
-
-        if raw_data == None:
-            return messagebox.showinfo("Error", "File not found.")
+        file = self.load_json()
+        if file["data"] is None:
+            messagebox.showinfo("Error", "File not found.")
+            return
+        raw_data = file["data"]
 
         self.gui_handler.clear_frame(self.gui_handler.middle_frame)
         self.gui_handler.clear_frame(self.gui_handler.bottom_frame)
@@ -98,9 +124,12 @@ class JSONHandler:
         length_hw = len(hardware)
         self.gui_handler.push_data_sw(
             software, self.global_data.total_sw, length_hw
-        )  # Length is passed to the function so that the table can be appended where previous one ended
+        )  # Length is passed to the function so that the
+        # table can be appended where previous one ended
         self.gui_handler.push_desc(
-            "You can see the total project cost broken down to Hardware and Software below.\n You can update your estimates by pressing 'Update' button below the table."
+            "You can see the total project cost broken down to Hardware and "
+            "Software below.\n You can update your "
+            "estimates by pressing 'Update' button below the table."
         )
 
         # Table headers
@@ -142,5 +171,6 @@ class JSONHandler:
             bg="red",
             font=("Arial Bold", 13),
         )
+
         label_grand_total.grid(row=r, column=8, pady=10)
         self.global_data.total_widgets["grand_total"] = label_grand_total
