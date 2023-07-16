@@ -60,8 +60,58 @@
 			"tes_cost": 2.76
 		},
 		{
+			"type": "GDISP",
+			"description": "XVX - 4k cols, 1024x768, 100Mhz, 1MB VRAM",
+			"count": 1,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 16,
+			"cod_cost": 0,
+			"tes_cost": 2.76
+		},
+		{
+			"type": "Misc",
+			"description": "resistors, caps, etc",
+			"count": 1,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 16,
+			"cod_cost": 0,
+			"tes_cost": 2.76
+		},
+		{
+			"type": "ROM",
+			"description": "32KB",
+			"count": 2,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 16,
+			"cod_cost": 0,
+			"tes_cost": 2.76
+		},
+		{
+			"type": "ROM",
+			"description": "8KB",
+			"count": 2,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 16,
+			"cod_cost": 0,
+			"tes_cost": 2.76
+		},
+		{
 			"type": "RAM",
-			"description": "256KB",
+			"description": "256KB X 2 = 512KB",
+			"count": 2,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 16,
+			"cod_cost": 0,
+			"tes_cost": 2.76
+		},
+		{
+			"type": "IOP-J 1",
+			"description": "SC150 - 2ch Joy/mse/keybd connector",
 			"count": 2,
 			"price": 5,
 			"man_cost": 0,

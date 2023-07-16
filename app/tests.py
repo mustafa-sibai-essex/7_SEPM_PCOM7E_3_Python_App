@@ -14,27 +14,30 @@ Functions:
 Fixtures used in the tests can be found in conftest.py
 """
 
-import app, gui_handler
-from json_handler import JSONHandler
+import sys
+
+sys.path.insert(0, "..")
 import os
+from gui_handler import GUIHandler
+from json_handler import JSONHandler
 from app_data import AppData
 
+keys = [
+    "type",
+    "description",
+    "count",
+    "price",
+    "man_cost",
+    "des_cost",
+    "cod_cost",
+    "tes_cost",
+    "total",
+]
+global_data = AppData(keys, [], [], 0.0, 0.0, {})
+json_handler = JSONHandler(global_data)
+gui_handler = GUIHandler(global_data, json_handler)
+json_handler.set_gui_handler(gui_handler)
 
-def start_test():
-    keys = [
-        "type",
-        "description",
-        "count",
-        "price",
-        "man_cost",
-        "des_cost",
-        "cod_cost",
-        "tes_cost",
-        "total",
-    ]
-    global_data = AppData(keys, [], [], 0.0, 0.0, {})
-    handler = JSONHandler(global_data)
-    return {"handler": handler, "data": global_data}
 
 def test_calculate(test_data_1):
     """A test case to check if the calculation is correct"""
@@ -44,8 +47,6 @@ def test_calculate(test_data_1):
 
 def test_hw_data(test_data_2):
     """Tests if the hardware data is parsed correctly"""
-    test_dict = start_test()
-    test_handler = test_dict["handler"]
     total = 180.18  # Total of the test data, not used in the test - only to pass it as argument
     test_entries = gui_handler.push_data_hw(test_data_2, total)
     assert len(test_data_2) == len(test_entries)
@@ -53,8 +54,6 @@ def test_hw_data(test_data_2):
 
 def test_sw_data(test_data_3):
     """Tests if the software data is parsed correctly"""
-    test_dict = start_test()
-    test_handler = test_dict["handler"]
     total = 56.69  # Total of the test data, not used in the test - only to pass it as argument
     test_entries = gui_handler.push_data_hw(test_data_3, total)
     assert len(test_data_3) == len(test_entries)
@@ -67,31 +66,39 @@ def test_label():
     test_text = test_label.cget("text")
     assert text == test_text
 
+
 def test_export_json(mocker):
-    mocker.patch("app.filedialog.asksaveasfilename", return_value="project_test_data.json")
-    test_dict = start_test()
-    test_handler = test_dict["handler"]
-    test_data = test_dict["data"]
-    test_handler.export_json(test_data)
+    mocker.patch(
+        "json_handler.filedialog.asksaveasfilename",
+        return_value="project_test_data.json",
+    )
+    json_handler.export_json(global_data)
     os.remove("project_test_data.json")
+
 
 def test_import_json(mocker):
-    mocker.patch("app.filedialog.asksaveasfilename", return_value="project_test_data.json")
-    test_dict = start_test()
-    test_handler = test_dict["handler"]
-    test_data = test_dict["data"]
-    test_handler.export_json(test_data)
-    mocker.patch("app.filedialog.askopenfilename", return_value="project_test_data.json")
-    raw_data = test_handler.load_json()
+    mocker.patch(
+        "json_handler.filedialog.asksaveasfilename",
+        return_value="project_test_data.json",
+    )
+    json_handler.export_json(global_data)
+    mocker.patch(
+        "json_handler.filedialog.askopenfilename", return_value="project_test_data.json"
+    )
+    raw_data = json_handler.load_json()
     assert raw_data != None
 
+
 def test_import_json_not_found(mocker):
-    mocker.patch("app.filedialog.asksaveasfilename", return_value="project_test_data.json")
-    test_dict = start_test()
-    test_handler = test_dict["handler"]
-    test_data = test_dict["data"]
-    test_handler.export_json(test_data)
+    mocker.patch(
+        "json_handler.filedialog.asksaveasfilename",
+        return_value="project_test_data.json",
+    )
+    json_handler.export_json(global_data)
     os.remove("project_test_data.json")
-    mocker.patch("app.filedialog.askopenfilename", return_value="project_test_data.json")
-    raw_data = test_handler.load_json()
-    assert raw_data == None
+    mocker.patch(
+        "json_handler.filedialog.askopenfilename", return_value="project_test_data.json"
+    )
+    raw_data = json_handler.load_json()
+    data = raw_data["data"]
+    assert data == None
