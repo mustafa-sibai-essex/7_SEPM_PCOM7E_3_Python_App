@@ -11,15 +11,15 @@ class JSONHandler:
     def set_gui_handler(self, gui_handler):
         self.gui_handler = gui_handler
 
-    def export_json(self):
+    def export_json(self, global_data):
         """Exports data as a j.son file"""
 
         hardware_list = []
         software_list = []
-        keys = self.global_data.keys
+        keys = global_data.keys
 
         # Packing hardware components into a list of dictionaries
-        for row in self.global_data.entries_hw:
+        for row in global_data.entries_hw:
             i = 0
             entry = {}
             for item in row:
@@ -31,7 +31,7 @@ class JSONHandler:
                 i += 1
             hardware_list.append(entry)
 
-        for row in self.global_data.entries_sw:
+        for row in global_data.entries_sw:
             i = 0
             entry = {}
             for item in row:

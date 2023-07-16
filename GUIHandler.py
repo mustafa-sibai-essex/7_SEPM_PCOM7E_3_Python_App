@@ -3,21 +3,11 @@ import tkinter as tk
 from tkinter import simpledialog, messagebox
 import os
 
+
 class GUIHandler:
     def __init__(self, global_data, json_handler):
         self.global_data = global_data
         self.json_handler = json_handler
-        self.keys = [
-            "type",
-            "description",
-            "count",
-            "price",
-            "man_cost",
-            "des_cost",
-            "cod_cost",
-            "tes_cost",
-            "total",
-        ]
 
     def get_bottom_frame(self):
         return self.bottom_frame
@@ -92,7 +82,8 @@ class GUIHandler:
             label="Import .json", command=self.json_handler.upload_json
         )
         file_menu.add_command(
-            label="Export .json", command=self.json_handler.export_json
+            label="Export .json",
+            command=lambda: self.json_handler.export_json(self.global_data),
         )
         file_menu.add_command(
             label="Open & edit .json", command=self.json_handler.open_json
@@ -129,7 +120,7 @@ class GUIHandler:
         for i in range(index):
             cols = []
             j = 0
-            for key in self.keys:
+            for key in self.global_data.keys:
                 e = Entry(self.bottom_frame, relief=GROOVE, width=10)
                 e.grid(row=r, column=j)
                 e.insert(END, data_set[i][key])
@@ -173,7 +164,7 @@ class GUIHandler:
         for i in range(index):
             cols = []
             j = 0
-            for key in self.keys:
+            for key in self.global_data.keys:
                 e = Entry(self.bottom_frame, relief=GROOVE, width=10)
                 e.grid(row=r, column=j)
                 e.insert(END, data_set[i][key])
@@ -349,84 +340,6 @@ class GUIHandler:
         self.global_data.total_hw = 0
         self.global_data.total_sw = 0
 
-        def new_hw(hw_count):
-            """Displays the  empty hardware table"""
-            r = 1  # Because row 0 has the headers, table starts from row 1.
-            rows = []
-            for i in range(hw_count):
-                cols = []
-                j = 0
-                for key in self.keys:
-                    e = Entry( self.bottom_frame, relief=GROOVE, width=10)
-                    e.grid(row=r, column=j)
-                    cols.append(e)
-                    j += 1
-                r += 1
-                rows.append(cols)
-            self.global_data.entries_hw = rows
-            label_total_text = tk.Label(
-                self.bottom_frame, text="Hardware Total", bg="green", font=("Arial Bold", 12)
-            )
-            label_total_text.grid(row=hw_count + 1, column=7, pady=2)
-            label_total_hw = tk.Label(
-                self.bottom_frame,
-                text=f"£{self.global_data.total_hw}",
-                bg="green",
-                font=("Arial Bold", 12),
-            )
-            label_total_hw.grid(row=hw_count + 1, column=8, pady=2)
-            self.global_data.total_widgets["hw_total"] = label_total_hw
-
-            # Add an update button
-            button_update_hw = tk.Button(
-                self.bottom_frame,
-                text="Update Hardware",
-                font=("Arial", 12),
-                height=1,
-                command=lambda: self.update_hw(),
-            )
-            button_update_hw.grid(row=hw_count + 2, column=8, pady=2)
-
-        def new_sw(sw_count):
-            """Displays the  empty software table"""
-            r = (
-                len(self.global_data.entries_hw) + 3
-            )  # Due to headers, total hardware cost and update button we need to add three rows
-            rows = []
-            for i in range(sw_count):
-                cols = []
-                j = 0
-                for key in self.keys:
-                    e = Entry(self.bottom_frame, relief=GROOVE, width=10)
-                    e.grid(row=r, column=j)
-                    cols.append(e)
-                    j += 1
-                r += 1
-                rows.append(cols)
-            self.global_data.entries_sw = rows  # Updates the global variable
-            label_total_text = tk.Label(
-                self.bottom_frame, text="Software Total", bg="green", font=("Arial Bold", 12)
-            )
-            label_total_text.grid(row=r + 1, column=7, pady=2)
-            label_total_sw = tk.Label(
-                self.bottom_frame,
-                text=f"£{self.global_data.total_sw}",
-                bg="green",
-                font=("Arial Bold", 12),
-            )
-            label_total_sw.grid(row=r + 1, column=8, pady=2)
-            self.global_data.total_widgets["sw_total"] = label_total_sw
-
-            # Add an update button
-            button_update_sw = tk.Button(
-                self.bottom_frame,
-                text="Update Software",
-                font=("Arial", 12),
-                height=1,
-                command=lambda: self.update_sw(),
-            )
-            button_update_sw.grid(row=r + 2, column=8, pady=2)
-
         hw_count = simpledialog.askinteger(
             title="New template",
             prompt="How many hardware components does your project have?",
@@ -436,8 +349,8 @@ class GUIHandler:
             prompt="How many hardware components does your project have?",
         )
 
-        new_hw(hw_count)
-        new_sw(sw_count)
+        self.new_hw(hw_count)
+        self.new_sw(sw_count)
         self.push_desc(
             "You can use the empty template below to calculate the cost of your project.\nYou can also export your estimates by selecting 'Export .json' from file menu."
         )
@@ -463,6 +376,90 @@ class GUIHandler:
             i += 1
 
         self.grand_total()
+
+    def new_hw(self, hw_count):
+        """Displays the  empty hardware table"""
+        r = 1  # Because row 0 has the headers, table starts from row 1.
+        rows = []
+        for i in range(hw_count):
+            cols = []
+            j = 0
+            for key in self.global_data.keys:
+                e = Entry(self.bottom_frame, relief=GROOVE, width=10)
+                e.grid(row=r, column=j)
+                cols.append(e)
+                j += 1
+            r += 1
+            rows.append(cols)
+        self.global_data.entries_hw = rows
+        label_total_text = tk.Label(
+            self.bottom_frame,
+            text="Hardware Total",
+            bg="green",
+            font=("Arial Bold", 12),
+        )
+        label_total_text.grid(row=hw_count + 1, column=7, pady=2)
+        label_total_hw = tk.Label(
+            self.bottom_frame,
+            text=f"£{self.global_data.total_hw}",
+            bg="green",
+            font=("Arial Bold", 12),
+        )
+        label_total_hw.grid(row=hw_count + 1, column=8, pady=2)
+        self.global_data.total_widgets["hw_total"] = label_total_hw
+
+        # Add an update button
+        button_update_hw = tk.Button(
+            self.bottom_frame,
+            text="Update Hardware",
+            font=("Arial", 12),
+            height=1,
+            command=lambda: self.update_hw(),
+        )
+        button_update_hw.grid(row=hw_count + 2, column=8, pady=2)
+
+    def new_sw(self, sw_count):
+        """Displays the  empty software table"""
+        r = (
+            len(self.global_data.entries_hw) + 3
+        )  # Due to headers, total hardware cost and update button we need to add three rows
+        rows = []
+        for i in range(sw_count):
+            cols = []
+            j = 0
+            for key in self.global_data.keys:
+                e = Entry(self.bottom_frame, relief=GROOVE, width=10)
+                e.grid(row=r, column=j)
+                cols.append(e)
+                j += 1
+            r += 1
+            rows.append(cols)
+        self.global_data.entries_sw = rows  # Updates the global variable
+        label_total_text = tk.Label(
+            self.bottom_frame,
+            text="Software Total",
+            bg="green",
+            font=("Arial Bold", 12),
+        )
+        label_total_text.grid(row=r + 1, column=7, pady=2)
+        label_total_sw = tk.Label(
+            self.bottom_frame,
+            text=f"£{self.global_data.total_sw}",
+            bg="green",
+            font=("Arial Bold", 12),
+        )
+        label_total_sw.grid(row=r + 1, column=8, pady=2)
+        self.global_data.total_widgets["sw_total"] = label_total_sw
+
+        # Add an update button
+        button_update_sw = tk.Button(
+            self.bottom_frame,
+            text="Update Software",
+            font=("Arial", 12),
+            height=1,
+            command=lambda: self.update_sw(),
+        )
+        button_update_sw.grid(row=r + 2, column=8, pady=2)
 
     def about(self):
         """Displays about message box"""
