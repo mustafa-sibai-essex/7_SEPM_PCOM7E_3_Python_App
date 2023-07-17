@@ -49,7 +49,7 @@ pip install tk
 
 #### MacOS:
 ~~~
-brew install python-tk@3.10
+brew install python-tk
 ~~~
 Note: Make sure you specify the correct Python version in the end.
 
@@ -174,6 +174,14 @@ You can contact the developer (Etkin Getir) at eg22518@essex.ac.uk for questions
 Using pytest library, a total of 7 test cases were written for the application in order to test the basic functionality.
 
 Test cases can be found under tests folder, in tests.py file and fixtures used can be found in conftest.py file.
+
+In order to run the tests pytest, mock and pytest-mock packages should be isntalled by running the commands below:
+
+~~~
+pip install mock
+pip install pytest
+pip install pytest-mock
+~~~
 
 Tests can be run by running the following command in the tests folder:
 ~~~
