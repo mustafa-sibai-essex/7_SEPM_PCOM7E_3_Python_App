@@ -154,7 +154,7 @@
 			"description": "SCSI",
 			"count": 1,
 			"price": 5,
-			"man_cost": 12,
+			"man_cost": 0,
 			"des_cost": 0,
 			"cod_cost": 0,
 			"tes_cost": 0
