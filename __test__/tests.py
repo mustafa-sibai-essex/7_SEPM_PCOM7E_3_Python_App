@@ -2,7 +2,7 @@
 Includes unit tests for the basic functionality of the application.
 
 Imports:
-    app
+    __test__
 
 Functions:
     test_calculate()

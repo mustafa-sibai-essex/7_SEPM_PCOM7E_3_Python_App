@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 @dataclass
 class AppData:
-    """A class to keep track of global variables used throughout the app"""
+    """A class to keep track of global variables used throughout the __test__"""
 
     keys: list
     entries_hw: list

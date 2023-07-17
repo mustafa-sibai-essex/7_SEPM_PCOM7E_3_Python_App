@@ -171,12 +171,13 @@ You can contact the developer (Etkin Getir) at eg22518@essex.ac.uk for questions
 
 ## Tests
 
-Using pytest library, a total of 5 test cases were written for the application in order to test the basic functionality.
+Using pytest library, a total of 7 test cases were written for the application in order to test the basic functionality.
 
 Test cases can be found under tests folder, in tests.py file and fixtures used can be found in conftest.py file.
+
 Tests can be run by running the following command in the tests folder:
 ~~~
-pytest
+pytest tests.py
 ~~~
 
 ## License

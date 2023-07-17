@@ -503,7 +503,7 @@ class GUIHandler:
     def about(self):
         """Displays about message box"""
         messagebox.showinfo(
-            "About the app", "Project Cost Calculator\n(c) 2023\nSibai & Associates"
+            "About the __test__", "Project Cost Calculator\n(c) 2023\nSibai & Associates"
         )
 
     def read_me(self):

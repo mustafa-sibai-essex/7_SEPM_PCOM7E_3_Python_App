@@ -30,5 +30,4 @@ json_handler = JSONHandler(global_data)
 gui_handler = GUIHandler(global_data, json_handler)
 json_handler.set_gui_handler(gui_handler)
 
-if "__name__" == "__main__":
-    gui_handler.start()
+gui_handler.start()
