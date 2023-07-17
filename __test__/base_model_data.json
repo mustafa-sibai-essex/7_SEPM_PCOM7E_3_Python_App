@@ -1,0 +1,236 @@
+{
+	"Hardware": [
+		{
+			"type": "Board",
+			"description": "A83-S - All ICs have sockets",
+			"count": 1,
+			"price": 25,
+			"man_cost": 14,
+			"des_cost": 8,
+			"cod_cost": 0,
+			"tes_cost": 1.38
+		},
+		{
+			"type": "CPU",
+			"description": "68k0 - 8MHz",
+			"count": 1,
+			"price": 8,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "Glue Chip",
+			"description": "G1 - IOP-CPU",
+			"count": 1,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 4,
+			"cod_cost": 0,
+			"tes_cost": 0.69
+		},
+		{
+			"type": "Glue Chip",
+			"description": "G2 - RAM-CPU",
+			"count": 1,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 4,
+			"cod_cost": 0,
+			"tes_cost": 0.69
+		},
+		{
+			"type": "Glue Chip",
+			"description": "G3 - DISP-CPU",
+			"count": 1,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 4,
+			"cod_cost": 0,
+			"tes_cost": 0.69
+		},
+		{
+			"type": "Glue Chip",
+			"description": "G4 - SYSTEM",
+			"count": 1,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 4,
+			"cod_cost": 0,
+			"tes_cost": 0.69
+		},
+		{
+			"type": "GDISP",
+			"description": "XVX - 4k cols, 1024x768, 100Mhz, 1MB VRAM",
+			"count": 1,
+			"price": 25,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "Misc",
+			"description": "resistors, caps, etc",
+			"count": 100,
+			"price": 0.05,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "ROM",
+			"description": "32KB",
+			"count": 1,
+			"price": 4,
+			"man_cost": 0,
+			"des_cost": 4,
+			"cod_cost": 0,
+			"tes_cost": 0.69
+		},
+		{
+			"type": "ROM",
+			"description": "8KB",
+			"count": 1,
+			"price": 1.5,
+			"man_cost": 0,
+			"des_cost": 4,
+			"cod_cost": 0,
+			"tes_cost": 0.69
+		},
+		{
+			"type": "RAM",
+			"description": "256KB X 2 = 512KB",
+			"count": 2,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "IOP-J 1",
+			"description": "SC150 - 2ch Joy/mse/keybd connector",
+			"count": 1,
+			"price": 15,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "IOP-J 2",
+			"description": "SC100 - 2ch MPX serial ports",
+			"count": 1,
+			"price": 12,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "INTSND",
+			"description": "i8042 - mono snd, 2  8-bit ports",
+			"count": 1,
+			"price": 1.5,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "Storage",
+			"description": "3.5\" floppy",
+			"count": 2,
+			"price": 7.5,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "Keyboard",
+			"description": "int keyboard for case",
+			"count": 1,
+			"price": 5,
+			"man_cost": 0,
+			"des_cost": 0,
+			"cod_cost": 0,
+			"tes_cost": 0
+		},
+		{
+			"type": "Case",
+			"description": "Desktop - int keyboard, 3 ext ports (+ exp)",
+			"count": 1,
+			"price": 25,
+			"man_cost": 20,
+			"des_cost": 10,
+			"cod_cost": 0,
+			"tes_cost": 1.72
+		}
+	],
+	"Software": [
+		{
+			"type": "OS",
+			"description": "HB/OS in ROM 1 (20KB) - kernel, libs & drivers",
+			"count": 1,
+			"price": 0,
+			"man_cost": 0,
+			"des_cost": 9,
+			"cod_cost": 8.85,
+			"tes_cost": 0.37
+		},
+		{
+			"type": "OS",
+			"description": "McROM for full BDS system in ROM 2 (8KB)",
+			"count": 1,
+			"price": 0,
+			"man_cost": 0,
+			"des_cost": 2.25,
+			"cod_cost": 2.95,
+			"tes_cost": 0.15
+		},
+		{
+			"type": "Kernel",
+			"description": "MCC Kernel & drivers",
+			"count": 1,
+			"price": 0.025,
+			"man_cost": 0,
+			"des_cost": 12.38,
+			"cod_cost": 19.18,
+			"tes_cost": 0.52
+		},
+		{
+			"type": "Bootloader",
+			"description": "in house HWCFG app in ROM 1 (6KB)",
+			"count": 1,
+			"price": 0,
+			"man_cost": 0,
+			"des_cost": 1.5,
+			"cod_cost": 1.95,
+			"tes_cost": 0.05
+		},
+		{
+			"type": "Programming language",
+			"description": "C via Vi and PCC compiler",
+			"count": 1,
+			"price": 0,
+			"man_cost": 0,
+			"des_cost": 4.5,
+			"cod_cost": 4.43,
+			"tes_cost": 0.15
+		},
+		{
+			"type": "Office Suite",
+			"description": "EZ-Suite",
+			"count": 1,
+			"price": 0,
+			"man_cost": 0,
+			"des_cost": 11.25,
+			"cod_cost": 11.80,
+			"tes_cost": 0.15
+		}
+	]
+}
